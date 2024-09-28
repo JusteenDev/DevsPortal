@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* styles.css or your CSS file */
+@keyframes slideIn {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+}
+
+/* styles.css or your component's CSS file */
+
+@keyframes modalAnimationIn {
+  from {
+    transform: translateY(100%); /* Start off-screen from the bottom */
+    opacity: 0; /* Start invisible */
+  }
+  to {
+    transform: translateY(0); /* End at the original position */
+    opacity: 1; /* End visible */
+  }
+}
+
+@keyframes modalAnimationOut {
+  from {
+    transform: translateY(0); /* Start at the original position */
+    opacity: 1; /* Start visible */
+  }
+  to {
+    transform: translateY(100%); /* End off-screen to the bottom */
+    opacity: 0; /* End invisible */
+  }
+}
+
+/* styles.css or your component's CSS file */
+
+@keyframes slideInNav {
+  from {
+    transform: translateY(100%); /* Start off-screen from the bottom */
+    opacity: 0; /* Start invisible */
+  }
+  to {
+    transform: translateY(0); /* End at the original position */
+    opacity: 1; /* End visible */
+  }
+}
+
+@keyframes slideOutNav {
+  from {
+    transform: translateY(0); /* Start at the original position */
+    opacity: 1; /* Start visible */
+  }
+  to {
+    transform: translateY(100%); /* End off-screen to the bottom */
+    opacity: 0; /* End invisible */
+  }
+}
+
+.bottom-nav {
+  animation: slideInNav 0.5s forwards; /* Apply slide-in animation */
+}
+
+.bottom-nav.hidden {
+  animation: slideOutNav 0.5s forwards; /* Apply slide-out animation */
+}
+
+.modal-box {
+  animation: modalAnimationIn 0.3s forwards; /* Apply slide-in animation */
+}
+
+.modal-box.hidden {
+  animation: modalAnimationOut 0.3s forwards; /* Apply slide-out animation */
+}
+
+.channel-container {
+  overflow-y: hidden;
+}
+
+.channel {
+  animation: slideIn 0.2s ease-out;
+  font-size: 10px;
+  padding: 10px;
+}
+
+
+body{
+  user-select: none;
+}
