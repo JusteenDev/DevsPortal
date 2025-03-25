@@ -1,6 +1,6 @@
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
-import { getDatabase, set, ref } from "@firebase/database";
-import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { getDatabase, set, ref } from "firebase/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState } from 'react';
 
 const Create = ({ setBottomNavDisabled }) => { // Accept the prop from App

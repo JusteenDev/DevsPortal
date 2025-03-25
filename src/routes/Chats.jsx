@@ -1,5 +1,5 @@
-import { getDatabase, ref, onValue } from "@firebase/database";
-import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useLongPress } from "@uidotdev/usehooks";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate

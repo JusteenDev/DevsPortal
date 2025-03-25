@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleAuthProvider, GithubAuthProvider, getAuth, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, GithubAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword ,onAuthStateChanged } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -12,6 +12,7 @@ const Login = () => {
 
   // State for password visibility and password input
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // State to store errors and control opacity
@@ -39,17 +40,32 @@ const Login = () => {
 
   // Automatically dismiss the error message after 3 seconds with a fade-out effect
   useEffect(() => {
+    
     if (error) {
       const timer = setTimeout(() => {
         setOpacity(0);  // Set opacity to 0 to trigger the fade-out effect
         setTimeout(() => {
           setError(null);  // After the transition, remove the error
         }, 300);  // This delay should match the duration of the CSS transition
-      }, 1000);  // Show the error for 1 second before starting fade out
+      }, 5000);  // Show the error for 1 second before starting fade out
 
       return () => clearTimeout(timer); // Clear the timer if the component unmounts
     }
   }, [error]);
+
+  const handleEmailLogin = (e) => {
+    e.preventDefault();
+    setError(null);  // Reset any previous errors
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Email user signed in:", user);
+      })
+      .catch((error) => {
+        handleAuthError(error.code);
+        setOpacity(1);  // Reset the opacity for the new error message
+      });
+  };
 
   const handleGithubLogin = (e) => {
     e.preventDefault();
@@ -60,7 +76,7 @@ const Login = () => {
         console.log("Github user signed in:", user);
       })
       .catch((error) => {
-        setError(error); // Set the error state to display in the UI
+        handleAuthError(error.code);
         setOpacity(1);  // Reset the opacity for the new error message
       });
   };
@@ -74,9 +90,31 @@ const Login = () => {
         console.log("Google user signed in:", user);
       })
       .catch((error) => {
-        setError(error); // Set the error state to display in the UI
+        handleAuthError(error.code);
         setOpacity(1);  // Reset the opacity for the new error message
       });
+  };
+
+  const handleAuthError = (errorCode) => {
+    switch (errorCode) {
+      case 'auth/invalid-email':
+        setError('Invalid email address.');
+        break;
+      case 'auth/user-disabled':
+        setError('User account is disabled.');
+        break;
+      case 'auth/user-not-found':
+        setError('No user found with this email.');
+        break;
+      case 'auth/wrong-password':
+        setError('Incorrect password.');
+        break;
+      case 'auth/invalid-credential':
+        setError('Invalid credentials or your password is incorrect.');
+        break;
+      default:
+        setError(errorCode);
+    }
   };
 
   const handleSignUpNavigate = () => {
@@ -108,13 +146,19 @@ const Login = () => {
 
           {/* Show the error message if an error occurs */}
           {error && (
-            <div role="alert" className="alert alert-error h-fit w-fit max-w-[100px] fixed top-10 shadow-lg p-4 rounded-md bg-red-500 text-white transition-opacity duration-300" style={{ opacity: opacity }} >
-              <p className="text-xs">{error.code}</p>
+            <div role="alert" className="alert alert-error h-fit w-fit fixed top-10 shadow-lg p-2rounded-md bg-red-500 text-white transition-opacity duration-300" style={{ opacity: opacity }} >
+              <p className="text-xs">{error}</p>
             </div>
           )}
 
           <div className="flex flex-col gap-2 items-center max-w-[250px] mt-10">
-            <input type="text" placeholder="Email | Username" className="input input-md email w-full bg-base-100" />
+            <input 
+              type="text" 
+              placeholder="Email" 
+              className="input input-md email w-full bg-base-100" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
             {/* Password Input with Show/Hide Icon */}
             <div className="relative w-full">
@@ -130,7 +174,7 @@ const Login = () => {
               </button>
             </div>
 
-            <button className="signin btn btn-primary btn-md w-full">Login</button>
+            <button onClick={handleEmailLogin} className="signin btn btn-primary btn-md w-full">Login</button>
             <a href="" className="btn btn-ghost btn-xs forgot text-xs underline">Forgot password</a>
             <div className="divider text-sm">or</div>
 
